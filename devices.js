@@ -19,3 +19,10 @@ export async function getAllDevices(req, res) {
     const collection = await devices.find().toArray()
     res.send(collection)
 }
+export async function toggleSwitch(req, res) {
+    fetch("http://192.168.15.35/rpc/Switch.Toggle?id=0")
+}
+export async function getDeviceData() {
+    const data = await fetch("http://192.168.15.35/rpc/Switch.GetStatus?id=0")
+    return data
+}
