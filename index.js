@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv"
-import { addNewDevice, getAllDevices, getDeviceData, toggleSwitch } from "./devices.js";
+import { addNewDevice, getAllDevices, getDeviceData, getOneByID, toggleSwitch } from "./devices.js";
 
 dotenv.config()
 
@@ -18,6 +18,7 @@ app.get('/devices', getAllDevices)
 app.get('/fetch', async (req, res) => {
     toggleSwitch()
     const result = await getDeviceData()
-    const data = await result.json()
-    res.send(data)
+    // console.log(result)
+    res.send(result)
 })
+app.get('/devices/:deviceId', getOneByID)
