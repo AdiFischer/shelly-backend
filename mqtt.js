@@ -1,4 +1,9 @@
 import mqtt from "mqtt"
+import { dbConnect } from "./dbConnect.js"
+// import { ObjectId } from "mongodb"
+
+const db = dbConnect()
+const devices = db.collection("devices")
 
 const subTst = '#'
 const subTopic1 = 'shellyplus1pm-a8032ab9c910/online'       // no need to manually pub
@@ -27,10 +32,25 @@ if(client.connected){
     })
     
     client.on('message',async (topic, data) => {
-        console.log(data.toString())
+        await getDeviceData(data)
+        // console.log(data.toString())
         // let deviceData = data.toString();
         // let funRes = await mqttMsgToMongo(JSON.parse(deviceData));
         // console.log(funRes)
     })
+
+}
+
+export async function getDeviceData(data) {
+    let deviceData = data.toString();
+    // console.log(data.toString())
+    try {
+        const inserted = await devices.insertOne(JSON.parse(deviceData))
+        console.log(inserted)
+
+    } catch (error) {
+        console.log(error)
+        return error
+    }
 
 }
